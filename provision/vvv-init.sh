@@ -56,10 +56,10 @@ if ! $(noroot wp core is-installed); then
   noroot wp plugin install wordpress-database-reset --activate
   noroot wp plugin install rtl-tester
   noroot wp plugin install piglatin
-  noroot wp plugin install debug-bar  --activate
-  noroot wp plugin install debug-bar-console  --activate
-  noroot wp plugin install debug-bar-cron  --activate
-  noroot wp plugin install debug-bar-extender  --activate
+  noroot wp plugin install debug-bar
+  noroot wp plugin install debug-bar-console
+  noroot wp plugin install debug-bar-cron
+  noroot wp plugin install debug-bar-extender
   noroot wp plugin install rewrite-rules-inspector  --activate
   noroot wp plugin install log-deprecated-notices  --activate
   noroot wp plugin install log-deprecated-notices-extender  --activate
@@ -104,6 +104,9 @@ else
   echo "Updating WordPress Stable..."
   cd ${VVV_PATH_TO_SITE}/public_html
   noroot wp core update --version="${WP_VERSION}"
+
+  echo "Updating Plugins"
+  noroot wp plugin update --all
 fi
 
 cp -f "${VVV_PATH_TO_SITE}/provision/vvv-nginx.conf.tmpl" "${VVV_PATH_TO_SITE}/provision/vvv-nginx.conf"
