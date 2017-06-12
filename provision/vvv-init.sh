@@ -82,15 +82,20 @@ if ! $(noroot wp core is-installed); then
   noroot wp search-replace "wpthemetestdata.wordpress.com" "${DOMAIN}" --skip-columns=guid
 
   # Install Sage
+  echo "Downloading Sage Theme..."
   cd ${VVV_PATH_TO_SITE}/public_html/wp-content/themes/
   # noroot wp theme install 'https://github.com/gkmurray/sage/archive/develop.zip'
 
   # Download via curl
   curl -LO https://github.com/gkmurray/sage/archive/develop.zip
+
+  echo "Extracting..."
+  unzip sage-develop.zip
   mv sage-develop sage
-  rm develop.zip
+  # rm develop.zip
 
   # Install theme dependencies
+  echo "Installing Sage dependencies..."
   cd sage
   noroot composer install
 
