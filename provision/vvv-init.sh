@@ -90,9 +90,9 @@ if ! $(noroot wp core is-installed); then
   curl -LO https://github.com/gkmurray/sage/archive/develop.zip
 
   echo "Extracting..."
-  unzip sage-develop.zip
-  mv sage-develop sage
-  # rm develop.zip
+  unzip develop.zip
+  mv develop sage
+  rm develop.zip
 
   # Install theme dependencies
   echo "Installing Sage dependencies..."
