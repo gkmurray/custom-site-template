@@ -91,7 +91,7 @@ if ! $(noroot wp core is-installed); then
 
   echo "Extracting..."
   unzip develop.zip
-  mv develop sage
+  mv sage-develop sage
   rm develop.zip
 
   # Install theme dependencies
