@@ -46,7 +46,7 @@ if ! $(noroot wp core is-installed); then
 
   noroot wp core ${INSTALL_COMMAND} --url="${DOMAIN}" --quiet --title="${SITE_TITLE}" --admin_name=admin --admin_email="admin@local.dev" --admin_password="password"
 
-  # Install Plugins
+  # Install development Plugins
   echo "Installing plugins..."
   noroot wp plugin install wordpress-importer --activate
   noroot wp plugin install developer --activate
@@ -99,6 +99,9 @@ if ! $(noroot wp core is-installed); then
   cd sage
   noroot composer install
 
+  # Activate theme
+  echo "Activate theme"
+  noroot wp theme activate sage/resources
 
 else
   echo "Updating WordPress Stable..."
