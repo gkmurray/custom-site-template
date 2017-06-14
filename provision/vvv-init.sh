@@ -8,6 +8,7 @@ WP_VERSION=`get_config_value 'wp_version' 'latest'`
 WP_TYPE=`get_config_value 'wp_type' "single"`
 DB_NAME=`get_config_value 'db_name' "${VVV_SITE_NAME}"`
 DB_NAME=${DB_NAME//[\\\/\.\<\>\:\"\'\|\?\!\*-]/}
+THEME_BRANCH='update-rename-script'
 
 # Make a database, if we don't already have one
 echo -e "\nCreating database '${DB_NAME}' (if it's not already there)"
@@ -87,12 +88,12 @@ if ! $(noroot wp core is-installed); then
   # noroot wp theme install 'https://github.com/gkmurray/sage/archive/develop.zip'
 
   # Download via curl
-  curl -LO https://github.com/gkmurray/sage/archive/update-rename-script.zip
+  curl -LO https://github.com/gkmurray/sage/archive/"${THEME_BRANCH}".zip
 
   echo "Extracting..."
-  unzip develop.zip
-  mv sage-develop "${VVV_SITE_NAME}"
-  rm develop.zip
+  unzip "${THEME_BRANCH}".zip
+  mv sage-"${THEME_BRANCH}" "${VVV_SITE_NAME}"
+  rm "${THEME_BRANCH}".zip
 
   # Install theme dependencies
   echo "Installing Sage dependencies..."
