@@ -87,21 +87,21 @@ if ! $(noroot wp core is-installed); then
   # noroot wp theme install 'https://github.com/gkmurray/sage/archive/develop.zip'
 
   # Download via curl
-  curl -LO https://github.com/gkmurray/sage/archive/develop.zip
+  curl -LO https://github.com/gkmurray/sage/archive/update-rename-script.zip
 
   echo "Extracting..."
   unzip develop.zip
-  mv sage-develop sage
+  mv sage-develop "${VVV_SITE_NAME}"
   rm develop.zip
 
   # Install theme dependencies
   echo "Installing Sage dependencies..."
-  cd sage
+  cd "${VVV_SITE_NAME}"
   noroot composer install
 
   # Activate theme
   echo "Activate theme"
-  noroot wp theme activate sage/resources
+  noroot wp theme activate "${VVV_SITE_NAME}/resources"
 
 else
   echo "Updating WordPress Stable..."
