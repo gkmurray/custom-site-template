@@ -97,8 +97,8 @@ if ! $(noroot wp core is-installed); then
   rm "${THEME_BRANCH}".zip
   cd "${THEME_SLUG}"
 
-  #Update text domain and browsersync config
-  bash bin/rename-text-domain.sh "${THEME_SLUG}" true
+  #Update browsersync config
+  bash bin/rename-text-domain.sh "${THEME_SLUG}" false
 
   # Install theme dependencies
   echo "Installing Sage dependencies..."
