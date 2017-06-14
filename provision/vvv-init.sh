@@ -8,6 +8,8 @@ WP_VERSION=`get_config_value 'wp_version' 'latest'`
 WP_TYPE=`get_config_value 'wp_type' "single"`
 DB_NAME=`get_config_value 'db_name' "${VVV_SITE_NAME}"`
 DB_NAME=${DB_NAME//[\\\/\.\<\>\:\"\'\|\?\!\*-]/}
+THEME_SLUG=`get_config_value 'theme_slug' "${VVV_SITE_NAME}"`
+THEME_BRANCH=`get_config_value 'theme_branch' 'develop'`
 
 # Make a database, if we don't already have one
 echo -e "\nCreating database '${DB_NAME}' (if it's not already there)"
@@ -87,21 +89,24 @@ if ! $(noroot wp core is-installed); then
   # noroot wp theme install 'https://github.com/gkmurray/sage/archive/develop.zip'
 
   # Download via curl
-  curl -LO https://github.com/gkmurray/sage/archive/develop.zip
+  curl -LO https://github.com/gkmurray/sage/archive/"${THEME_BRANCH}".zip
 
   echo "Extracting..."
-  unzip develop.zip
-  mv sage-develop sage
-  rm develop.zip
+  unzip "${THEME_BRANCH}".zip
+  mv sage-"${THEME_BRANCH}" "${THEME_SLUG}"
+  rm "${THEME_BRANCH}".zip
+  cd "${THEME_SLUG}"
+
+  #Update browsersync config
+  bash bin/rename-text-domain.sh "${THEME_SLUG}" false
 
   # Install theme dependencies
   echo "Installing Sage dependencies..."
-  cd sage
   noroot composer install
 
   # Activate theme
   echo "Activate theme"
-  noroot wp theme activate sage/resources
+  noroot wp theme activate "${THEME_SLUG}/resources"
 
 else
   echo "Updating WordPress Stable..."
