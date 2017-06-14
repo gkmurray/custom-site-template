@@ -8,7 +8,8 @@ WP_VERSION=`get_config_value 'wp_version' 'latest'`
 WP_TYPE=`get_config_value 'wp_type' "single"`
 DB_NAME=`get_config_value 'db_name' "${VVV_SITE_NAME}"`
 DB_NAME=${DB_NAME//[\\\/\.\<\>\:\"\'\|\?\!\*-]/}
-THEME_BRANCH='update-rename-script'
+THEME_SLUG=`get_config_value 'theme_slug' "${VVV_SITE_NAME}"`
+THEME_BRANCH=`get_config_value 'theme_branch' 'develop'`
 
 # Make a database, if we don't already have one
 echo -e "\nCreating database '${DB_NAME}' (if it's not already there)"
@@ -92,17 +93,17 @@ if ! $(noroot wp core is-installed); then
 
   echo "Extracting..."
   unzip "${THEME_BRANCH}".zip
-  mv sage-"${THEME_BRANCH}" "${VVV_SITE_NAME}"
+  mv sage-"${THEME_BRANCH}" "${THEME_SLUG}"
   rm "${THEME_BRANCH}".zip
 
   # Install theme dependencies
   echo "Installing Sage dependencies..."
-  cd "${VVV_SITE_NAME}"
+  cd "${THEME_SLUG}"
   noroot composer install
 
   # Activate theme
   echo "Activate theme"
-  noroot wp theme activate "${VVV_SITE_NAME}/resources"
+  noroot wp theme activate "${THEME_SLUG}/resources"
 
 else
   echo "Updating WordPress Stable..."
