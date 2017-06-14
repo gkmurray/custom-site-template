@@ -95,10 +95,13 @@ if ! $(noroot wp core is-installed); then
   unzip "${THEME_BRANCH}".zip
   mv sage-"${THEME_BRANCH}" "${THEME_SLUG}"
   rm "${THEME_BRANCH}".zip
+  cd "${THEME_SLUG}"
+
+  #Update text domain and browsersync config
+  bash bin/rename-text-domain.sh "${THEME_SLUG}" true
 
   # Install theme dependencies
   echo "Installing Sage dependencies..."
-  cd "${THEME_SLUG}"
   noroot composer install
 
   # Activate theme
