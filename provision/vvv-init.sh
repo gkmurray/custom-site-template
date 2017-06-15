@@ -84,7 +84,7 @@ if ! $(noroot wp core is-installed); then
   noroot wp search-replace "wpthemetestdata.wordpress.com" "${DOMAIN}" --skip-columns=guid
 
   # Install Theme
-  if [ "${THEME_REPO}" != "false" ]
+  if [ "${THEME_REPO}" != "false" ]; then
     cd ${VVV_PATH_TO_SITE}/public_html/wp-content/themes/
 
     echo "Trying to clone theme from repo..."
