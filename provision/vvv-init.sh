@@ -94,7 +94,7 @@ if ! $(noroot wp core is-installed); then
 
     #Update browsersync config
     echo "Updating config..."
-    bash bin/rename-text-domain.sh "${THEME_SLUG}" false
+    bash bin/set-config-data.sh "${THEME_SLUG}" false "${DOMAIN}"
 
     # Install theme dependencies
     echo "Installing dependencies..."
