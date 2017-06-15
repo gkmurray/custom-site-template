@@ -88,7 +88,7 @@ if ! $(noroot wp core is-installed); then
     cd ${VVV_PATH_TO_SITE}/public_html/wp-content/themes/
 
     echo "Trying to clone theme from repo..."
-    git clone "${THEME_REPO}" "${THEME_SLUG}"
+    git clone "${THEME_REPO}" "${THEME_SLUG}" #&
 
     cd "${THEME_SLUG}"
 
