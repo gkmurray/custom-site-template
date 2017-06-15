@@ -9,7 +9,7 @@ WP_TYPE=`get_config_value 'wp_type' "single"`
 DB_NAME=`get_config_value 'db_name' "${VVV_SITE_NAME}"`
 DB_NAME=${DB_NAME//[\\\/\.\<\>\:\"\'\|\?\!\*-]/}
 THEME_SLUG=`get_config_value 'theme_slug' "${VVV_SITE_NAME}"`
-THEME_BRANCH=`get_config_value 'theme_branch' 'develop'`
+THEME_REPO=`get_config_value 'theme_repo' "false"`
 
 # Make a database, if we don't already have one
 echo -e "\nCreating database '${DB_NAME}' (if it's not already there)"
@@ -83,30 +83,33 @@ if ! $(noroot wp core is-installed); then
   echo "Adjusting urls in database..."
   noroot wp search-replace "wpthemetestdata.wordpress.com" "${DOMAIN}" --skip-columns=guid
 
-  # Install Sage
-  echo "Downloading Sage Theme..."
-  cd ${VVV_PATH_TO_SITE}/public_html/wp-content/themes/
-  # noroot wp theme install 'https://github.com/gkmurray/sage/archive/develop.zip'
+  # Install Theme
+  if [ "${THEME_REPO}" != "false" ]; then
+    cd ${VVV_PATH_TO_SITE}/public_html/wp-content/themes/
 
-  # Download via curl
-  curl -LO https://github.com/gkmurray/sage/archive/"${THEME_BRANCH}".zip
+    echo "Adding bitbucket.org to list of known hosts..."
+    ssh-keyscan -H bitbucket.org >> ~/.ssh/known_hosts
 
-  echo "Extracting..."
-  unzip "${THEME_BRANCH}".zip
-  mv sage-"${THEME_BRANCH}" "${THEME_SLUG}"
-  rm "${THEME_BRANCH}".zip
-  cd "${THEME_SLUG}"
+    echo "Checking SSH keys..."
+    ssh -T git@bitbucket.org
 
-  #Update browsersync config
-  bash bin/rename-text-domain.sh "${THEME_SLUG}" false
+    echo "Trying to clone theme from repo..."
+    git clone "${THEME_REPO}" "${THEME_SLUG}"
+    
+    cd "${THEME_SLUG}"
 
-  # Install theme dependencies
-  echo "Installing Sage dependencies..."
-  noroot composer install
+    #Update browsersync config
+    echo "Updating config..."
+    bash bin/set-config-data.sh "${THEME_SLUG}" false "${DOMAIN}"
 
-  # Activate theme
-  echo "Activate theme"
-  noroot wp theme activate "${THEME_SLUG}/resources"
+    # Install theme dependencies
+    echo "Installing dependencies..."
+    noroot composer install
+
+    # Activate theme
+    echo "Activate theme..."
+    noroot wp theme activate "${THEME_SLUG}/resources"
+  fi
 
 else
   echo "Updating WordPress Stable..."
