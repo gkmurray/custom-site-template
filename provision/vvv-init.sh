@@ -88,7 +88,7 @@ if ! $(noroot wp core is-installed); then
     cd ${VVV_PATH_TO_SITE}/public_html/wp-content/themes/
 
     echo "Adding bitbucket.org to list of known hosts..."
-    ssh-keyscan -H bitbucket.org >> ~/.ssh/known_hosts
+    ssh-keyscan -t rsa bitbucket.org >> ~/.ssh/known_hosts
 
     echo "Checking SSH keys..."
     ssh -T git@bitbucket.org
