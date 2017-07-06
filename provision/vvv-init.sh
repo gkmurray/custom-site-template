@@ -87,8 +87,8 @@ if ! $(noroot wp core is-installed); then
   if [ "${THEME_REPO}" != "false" ]; then
     cd ${VVV_PATH_TO_SITE}/public_html/wp-content/themes/
 
-    echo "Copying known_hosts from vagrant shared folder..."
-    cp -rf "/srv/www/known_hosts" "~/.ssh/known_hosts" 
+    echo "Copying known_hosts from vagrant root..."
+    cp -rf /vagrant/known_hosts ~/.ssh
 
     echo "Checking SSH keys..."
     ssh -T git@bitbucket.org
