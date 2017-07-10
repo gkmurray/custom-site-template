@@ -76,7 +76,7 @@ if ! $(noroot wp core is-installed); then
   # Import the unit data.
   echo "Installing unit test data..."
   curl -O https://wpcom-themes.svn.automattic.com/demo/theme-unit-test-data.xml
-  noroot wp import theme-unit-test-data.xml --authors=create
+  noroot wp import theme-unit-test-data.xml --authors=create &> /dev/null
   rm theme-unit-test-data.xml
 
   # Replace url from unit data
@@ -86,9 +86,6 @@ if ! $(noroot wp core is-installed); then
   # Install Theme
   if [ "${THEME_REPO}" != "false" ]; then
     cd ${VVV_PATH_TO_SITE}/public_html/wp-content/themes/
-
-    echo "Copying known_hosts from vagrant root..."
-    cp -rf /vagrant/known_hosts ~/.ssh
 
     echo "Checking SSH keys..."
     ssh -T git@bitbucket.org
