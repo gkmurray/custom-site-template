@@ -88,11 +88,11 @@ if ! $(noroot wp core is-installed); then
     cd ${VVV_PATH_TO_SITE}/public_html/wp-content/themes/
 
     echo "Checking SSH keys..."
-    ssh -T git@bitbucket.org
+    noroot ssh -T git@bitbucket.org
 
     echo "Trying to clone theme from repo..."
-    git clone "${THEME_REPO}" "${THEME_SLUG}"
-    
+    noroot git clone "${THEME_REPO}" "${THEME_SLUG}"
+
     cd "${THEME_SLUG}"
 
     #Update browsersync config
