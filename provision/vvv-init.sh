@@ -103,6 +103,10 @@ if ! $(noroot wp core is-installed); then
     echo "Installing dependencies..."
     noroot composer install
 
+    #Symlink directory
+    echo "Creating symlink..."
+    ln -s -f $PWD /home/vagrant/${THEME_SLUG}
+
     # Activate theme
     echo "Activate theme..."
     noroot wp theme activate "${THEME_SLUG}/resources"
