@@ -105,12 +105,6 @@ if ! $(noroot wp core is-installed); then
 
     #Symlink directory
     echo "Creating symlink..."
-    echo "DEBUG"
-    echo "$PWD"
-    echo "$(pwd)"
-    echo "${VVV_PATH_TO_SITE}/public_html/wp-content/themes/${THEME_SLUG}"
-    echo "~/${THEME_SLUG}"
-    echo "END DEBUG"
     ln -s -f $PWD /home/vagrant/${THEME_SLUG}
 
     # Activate theme
