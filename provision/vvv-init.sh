@@ -105,7 +105,7 @@ if ! $(noroot wp core is-installed); then
 
     #Symlink directory
     echo "Creating symlink..."
-    noroot ln -s -f ${VVV_PATH_TO_SITE}/public_html/wp-content/themes/${THEME_SLUG} ~/${THEME_SLUG}
+    noroot ln -s -f "$PWD" ~/${THEME_SLUG}
 
     # Activate theme
     echo "Activate theme..."
