@@ -73,7 +73,7 @@ if ! $(noroot wp core is-installed); then
   noroot wp plugin install theme-test-drive  --activate
   noroot wp plugin install wordpress-beta-tester  --activate
 
-  # Import the unit data.
+  # Import the unit data
   echo "Installing unit test data..."
   curl -O https://wpcom-themes.svn.automattic.com/demo/theme-unit-test-data.xml
   noroot wp import theme-unit-test-data.xml --authors=create &> /dev/null
@@ -82,6 +82,10 @@ if ! $(noroot wp core is-installed); then
   # Replace url from unit data
   echo "Adjusting urls in database..."
   noroot wp search-replace "wpthemetestdata.wordpress.com" "${DOMAIN}" --skip-columns=guid
+
+  # Update permalink structure
+  echo "Updating permalinks..."
+  noroot wp rewrite structure '/%postname%/'
 
 else
   echo "Updating WordPress Stable..."
