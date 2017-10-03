@@ -24,8 +24,8 @@ touch ${VVV_PATH_TO_SITE}/log/access.log
 
 # Install and configure the latest stable version of WordPress
 if [[ ! -f "${VVV_PATH_TO_SITE}/public_html/wp-load.php" ]]; then
-    echo "Downloading WordPress..."
-	noroot wp core download --version="${WP_VERSION}"
+  echo "Downloading WordPress..."
+  noroot wp core download --version="${WP_VERSION}"
 fi
 
 if [[ ! -f "${VVV_PATH_TO_SITE}/public_html/wp-config.php" ]]; then
@@ -83,35 +83,6 @@ if ! $(noroot wp core is-installed); then
   echo "Adjusting urls in database..."
   noroot wp search-replace "wpthemetestdata.wordpress.com" "${DOMAIN}" --skip-columns=guid
 
-  # Install Theme
-  if [ "${THEME_REPO}" != "false" ]; then
-    cd ${VVV_PATH_TO_SITE}/public_html/wp-content/themes/
-
-    echo "Checking SSH keys..."
-    noroot ssh -T git@bitbucket.org
-
-    echo "Trying to clone theme from repo..."
-    noroot git clone "${THEME_REPO}" "${THEME_SLUG}"
-
-    cd "${THEME_SLUG}"
-
-    #Update browsersync config
-    echo "Updating config..."
-    bash bin/set-config-data.sh "${THEME_SLUG}" false "${DOMAIN}"
-
-    # Install theme dependencies
-    echo "Installing dependencies..."
-    noroot composer install
-
-    #Symlink directory
-    echo "Creating symlink..."
-    ln -s -f $PWD /home/vagrant/${THEME_SLUG}
-
-    # Activate theme
-    echo "Activate theme..."
-    noroot wp theme activate "${THEME_SLUG}/resources"
-  fi
-
 else
   echo "Updating WordPress Stable..."
   cd ${VVV_PATH_TO_SITE}/public_html
@@ -119,6 +90,40 @@ else
 
   echo "Updating Plugins"
   noroot wp plugin update --all
+fi
+
+# Install Theme
+if [ "${THEME_REPO}" != "false" ] && [ ! -d "${VVV_PATH_TO_SITE}/public_html/wp-content/themes/$THEME_SLUG" ]; then
+  cd ${VVV_PATH_TO_SITE}/public_html/wp-content/themes/
+
+  echo "Checking SSH keys..."
+  noroot ssh -T git@bitbucket.org
+
+  echo "Trying to clone theme from repo..."
+  noroot git clone ${THEME_REPO} ${THEME_SLUG}
+
+  cd ${THEME_SLUG}
+
+  #Update browsersync config
+  echo "Updating config..."
+  bash bin/set-config-data.sh ${THEME_SLUG} false ${DOMAIN}
+
+  echo "Copy dotfiles..."
+  cp -f "/vagrant/.env" ".env"
+
+  # Install theme dependencies
+  echo "Installing dependencies..."
+  noroot composer install
+
+  #Symlink directory
+  echo "Creating symlink..."
+  ln -s -f $PWD /home/vagrant/${THEME_SLUG}
+
+  # Activate theme
+  echo "Activate theme..."
+  noroot wp theme activate ${THEME_SLUG}/resources
+else
+  echo "Nothing to do..."
 fi
 
 cp -f "${VVV_PATH_TO_SITE}/provision/vvv-nginx.conf.tmpl" "${VVV_PATH_TO_SITE}/provision/vvv-nginx.conf"
