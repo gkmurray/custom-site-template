@@ -108,6 +108,9 @@ if [ "${THEME_REPO}" != "false" ] && [ ! -d "${VVV_PATH_TO_SITE}/public_html/wp-
   echo "Updating config..."
   bash bin/set-config-data.sh ${THEME_SLUG} false ${DOMAIN}
 
+  echo "Copy dotfiles..."
+  cp -f "/vagrant/.env" ".env"
+
   # Install theme dependencies
   echo "Installing dependencies..."
   noroot composer install
